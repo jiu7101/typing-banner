@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Typing Banner</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      font-family: 'Pretendard Variable', sans-serif;
+      background-color: #fff;
+      text-align: center;
+      color: #000;
+    }
+
+    .static-line {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .type-line {
+      font-size: 24px;
+      font-weight: 600;
+      color: #850000;
+      min-height: 30px;
+    }
+
+    .highlighted {
+      color: #850000;
+    }
+
+    .cursor {
+      display: inline-block;
+      animation: blink 1s infinite;
+      color: #850000;
+      font-weight: bold;
+    }
+
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="static-line">🎓 직접 들어보세요</div>
+  <div class="type-line">
+    <span id="listen-typed" class="highlighted fade-in-up"></span><span class="cursor">|</span>
+  </div>
+
+  <script>
+    function applyFadeEffect() {
+      const display = document.getElementById('listen-typed');
+      display.classList.remove('fade-in-up');
+      void display.offsetWidth;
+      display.classList.add('fade-in-up');
+    }
+
+    const phrases = [
+      "수강생들의 실제 변화된 목소리",
+      "350,000명이 경험한 리얼 보이스",
+      "지금 당신 차례입니다"
+    ];
+
+    let i = 0, j = 0;
+    let isDeleting = false;
+
+    function loopType() {
+      const display = document.getElementById('listen-typed');
+      const fullPhrase = phrases[i];
+
+      if (!isDeleting) {
+        display.textContent = fullPhrase.substring(0, j++);
+        if (j === 1) applyFadeEffect();
+        if (j > fullPhrase.length) {
+          isDeleting = true;
+          setTimeout(loopType, 1500);
+          return;
+        }
+      } else {
+        display.textContent = fullPhrase.substring(0, j--);
+        if (j === 0) {
+          isDeleting = false;
+          i = (i + 1) % phrases.length;
+        }
+      }
+
+      setTimeout(loopType, isDeleting ? 40 : 100);
+    }
+
+    document.addEventListener("DOMContentLoaded", loopType);
+  </script>
+</body>
+</html>
